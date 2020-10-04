@@ -23,7 +23,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function __toString()
     {
@@ -31,7 +31,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -39,7 +39,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function detach()
     {
@@ -50,7 +50,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSize()
     {
@@ -58,7 +58,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function tell()
     {
@@ -66,7 +66,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function eof()
     {
@@ -74,7 +74,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isSeekable()
     {
@@ -82,7 +82,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function seek($offset, $whence = SEEK_SET)
     {
@@ -90,7 +90,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -98,7 +98,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isWritable()
     {
@@ -106,7 +106,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function write($string)
     {
@@ -114,7 +114,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isReadable()
     {
@@ -122,7 +122,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function read($length)
     {
@@ -130,7 +130,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getContents()
     {
@@ -138,7 +138,7 @@ final class InputStream implements StreamInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMetadata($key = null)
     {

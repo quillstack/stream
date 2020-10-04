@@ -4,6 +4,16 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://quillstack.com/stream",
+    "keywords": [
+        "stream",
+        "input",
+        "php-input",
+        "php",
+        "php7",
+        "psr-7",
+        "stream-interface",
+        "psr"
+    ],
     "authors": [
         {
             "name": "Radek Ziemniewicz",

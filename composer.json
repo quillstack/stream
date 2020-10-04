@@ -16,8 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "QuillStack\\Http\\Stream\\": "src/QuillStack/Http/Stream/",
-            "QuillStack\\Mocks\\": "tests/QuillStack/Mocks/"
+            "QuillStack\\Http\\Stream\\": "src/QuillStack/Http/Stream/"
         }
     },
     "require-dev": {

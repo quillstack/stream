@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace QuillStack\Http\Request;
+namespace QuillStack\Http\Stream;
 
 use Psr\Http\Message\StreamInterface;
 

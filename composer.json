@@ -3,7 +3,7 @@
     "description": "The simple implementation of PSR-7: StreamInterface.",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://quillstack.com/stream",
+    "homepage": "https://quillstack.org/",
     "keywords": [
         "stream",
         "input",
@@ -17,7 +17,7 @@
     "authors": [
         {
             "name": "Radek Ziemniewicz",
-            "email": "open-source@quillstack.com"
+            "email": "radek@quillstack.org"
         }
     ],
     "require": {

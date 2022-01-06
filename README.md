@@ -1,4 +1,4 @@
-# QuillStack Stream
+# Quillstack Stream
 
 [![Build Status](https://app.travis-ci.com/quillstack/stream.svg?branch=main)](https://app.travis-ci.com/quillstack/stream)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=alert_status)](https://sonarcloud.io/dashboard?id=quillstack_stream)

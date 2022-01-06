@@ -1,6 +1,6 @@
 {
     "name": "quillstack/stream",
-    "description": "The simple implementation of PSR-7: StreamInterface.\n\n",
+    "description": "The simple implementation of PSR-7: StreamInterface.",
     "type": "library",
     "license": "MIT",
     "homepage": "https://quillstack.com/stream",
@@ -9,7 +9,7 @@
         "input",
         "php-input",
         "php",
-        "php7",
+        "php8",
         "psr-7",
         "stream-interface",
         "psr"
@@ -21,16 +21,21 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "psr/http-message": "^1.0"
     },
     "autoload": {
         "psr-4": {
-            "QuillStack\\Http\\Stream\\": "src/QuillStack/Http/Stream/"
+            "QuillStack\\Stream\\": "src/",
+            "QuillStack\\Stream\\Tests\\": "tests/"
         }
     },
     "require-dev": {
-        "symfony/var-dumper": "^5.1",
-        "phpunit/phpunit": "^9"
+        "quillstack/unit-tests": "^0.2.8"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0.x-dev"
+        }
     }
 }

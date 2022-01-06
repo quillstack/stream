@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-namespace QuillStack\Http\Stream;
+namespace QuillStack\Stream;
 
 use Psr\Http\Message\StreamInterface;
 
 final class InputStream implements StreamInterface
 {
-    /**
-     * @var string|null
-     */
     private ?string $body;
 
-    /**
-     * @param null $contest
-     */
     public function __construct($contest = null)
     {
         $body = $contest ?? file_get_contents('php://input');
@@ -126,7 +120,7 @@ final class InputStream implements StreamInterface
      */
     public function read($length)
     {
-        return $this->body;
+        return $this->body ?? '';
     }
 
     /**
@@ -134,7 +128,7 @@ final class InputStream implements StreamInterface
      */
     public function getContents()
     {
-        return $this->body;
+        return $this->body ?? '';
     }
 
     /**

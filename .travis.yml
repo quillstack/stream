@@ -12,7 +12,7 @@ addons:
     sonarcloud:
         organization: "quillstack"
         token:
-            secure: "YqTzBuAxRsvS+MeD/lMHrp7vOP8gvpSl4qvA4+sTjWfy5rL62jkk0xafP/4YOOZY8qtA1Gbdk4pIT62MmLsceXIaER46kOj9F+9Zm+wvW3z+B0ioMnen+nx2hde8Km58Ql0aK79WH7YQci82OGPlPa31VJjldun2zpeeKem8ywLJsJVKH5uIoPNzMpHfoIXRlk8Zh4Bn33bFru9k6/+7VQ/v42gAGpUKns2ycE2VIHqlHsG5r4046x2yj61T4bEhurGaTIOkEqog6OqFBc+EGojMkJwzE+/MgLcM7ngHjFtb/tdMuRGeJ+yXYFWachjiyUsYEpY+iC/sEdTeXxA7dt2y4ewloa7AedEFBSFBLnoNgTQHMfvbYHSfJoQ3K5eTTPY8rooMNKwdqJPWidb5uo+sNiB5UvfQvwzqYaYOiqfx1OV18jqXUE3XJFG5TxLnivkewgaL+S3w3Hi60OwIjmrvP8xAAtyrcy3RJnBHpvYByfVlgJB4bSxRVaXusKw6Vb4r1Gumd83y9D7p9jOW0iM0YM7RDLF1b8A4MJ0N8ccDJGtifsIl9TwCFHoJMdGp/RYuN4STDrcBptRhkGSnJz9NyH7+UQL5qdSx8fMJs7itdAU4AXqNTEqmN5vi6yT5df8jfxi7mABXVdDtzsaxoqdH9WSIJMTi+ItVyON6Xz4="
+            secure: "bCCSxwzLVg2L454FCQUBP2DwCUye9DiDZfOMDhfbO9/LaObg7BpGbr1S6ImuRO+qqaCrkrznNH/blBZ3PgAOe6dGMmKwJBR3QLlWgigFNOp4S4yw7uO+z3CCctN8qEBXP9OPW3m+AiwYUDd5OGQb8fWKwU8cW1y5GzVXnhua7x1IxYswUDnnBZIpt6HHvKGGXrCzF5wLIQHP+9keqYScxc+jp7wSXxQML8HRAjjo4nD9FQ3s/b8Asoz8+H0zizOAildvdhavTl2qQ5IESIPjBo+p74WVBfOlV3y+VUzlhIsQMJaslJ2C44Hjm7c9NyZI6vfkWX4j/TOa98OrfCyDeP6bm5yECJwfBW635wZmn91nQykgqh/MyGGLzWGJEFRY+0FSQbITdEx4msdW2oW5ulPafYkkXnv6aDOVPD3ZHjdWh3raMnHpSkHiG5msbGzHTTtcEti7II9sBFlmFULWJzdbU+hxTvGU6pDJXmtBhdfWahFVi+GcOVUPwbPkkmPz/XIGwg8BWymVjUrJO5hAnvyq4F3Yy9UOqgwn4ddBM8NmVqu5oIXVzrfF0XMqaRCiTSbvV55KTL/ssBwHQIAbRRc5Zc94s7zbxF879RCihgM3DivhdP92sP13RQ1to+J2P8ZsECJRmR1CLeq+t080crmjbV0ZlQikqjKic/vZXM8="
 
 git:
     depth: false
@@ -20,5 +20,5 @@ git:
 install: composer update --no-interaction --no-suggest --no-progress
 
 script:
-    - phpdbg -qrr vendor/bin/phpunit  --coverage-clover phpunit.coverage.xml --log-junit phpunit.report.xml
+    - phpdbg -qrr ./vendor/bin/unit-tests
     - sonar-scanner

@@ -25,7 +25,7 @@ class TestInputStream
         $this->stream = new InputStream();
     }
 
-    public function testEmptyInput()
+    public function emptyInput()
     {
         $stream = new InputStream();
 
@@ -35,7 +35,7 @@ class TestInputStream
         $this->assertEqual->equal(0, $stream->getSize());
     }
 
-    public function testEmptyGivenInput()
+    public function emptyGivenInput()
     {
         $contest = null;
         $stream = new InputStream($contest);
@@ -46,7 +46,7 @@ class TestInputStream
         $this->assertEqual->equal(0, $stream->getSize());
     }
 
-    public function testNotEmptyGivenInput()
+    public function notEmptyGivenInput()
     {
         $contest = 'test';
         $stream = new InputStream($contest);
@@ -57,70 +57,70 @@ class TestInputStream
         $this->assertEqual->equal(4, $stream->getSize());
     }
 
-    public function testClose()
+    public function close()
     {
         $close = $this->stream->close();
 
         $this->assertBoolean->isFalse($close);
     }
 
-    public function testTell()
+    public function tell()
     {
         $tell = $this->stream->tell();
 
         $this->assertEqual->equal(0, $tell);
     }
 
-    public function testEof()
+    public function eof()
     {
         $eof = $this->stream->eof();
 
         $this->assertBoolean->isFalse($eof);
     }
 
-    public function testIsSeekable()
+    public function isSeekable()
     {
         $isSeekable = $this->stream->isSeekable();
 
         $this->assertBoolean->isFalse($isSeekable);
     }
 
-    public function testSeek()
+    public function seek()
     {
         $seek = $this->stream->seek(0);
 
         $this->assertBoolean->isFalse($seek);
     }
 
-    public function testRewind()
+    public function rewind()
     {
         $rewind = $this->stream->rewind();
 
         $this->assertBoolean->isFalse($rewind);
     }
 
-    public function testIsWritable()
+    public function isWritable()
     {
         $isWritable = $this->stream->isWritable();
 
         $this->assertBoolean->isFalse($isWritable);
     }
 
-    public function testWrite()
+    public function write()
     {
         $write = $this->stream->write('test');
 
         $this->assertBoolean->isFalse($write);
     }
 
-    public function testIsReadable()
+    public function isReadable()
     {
         $isReadable = $this->stream->isReadable();
 
         $this->assertBoolean->isTrue($isReadable);
     }
 
-    public function testGetMetadata()
+    public function getMetadata()
     {
         $metadata = $this->stream->getMetadata();
 
@@ -128,14 +128,14 @@ class TestInputStream
         $this->assertEmpty->isEmpty($metadata);
     }
 
-    public function testGetMetadataWithKey()
+    public function getMetadataWithKey()
     {
         $metadata = $this->stream->getMetadata('key');
 
         $this->assertNull->isNull($metadata);
     }
 
-    public function testDetach()
+    public function detach()
     {
         $body = $this->stream->detach();
 

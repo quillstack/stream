@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace QuillStack\Stream;
+namespace Quillstack\Stream;
 
 use Psr\Http\Message\StreamInterface;
 
-final class InputStream implements StreamInterface
+class InputStream implements StreamInterface
 {
     private ?string $body;
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace QuillStack\Stream\Tests\Unit;
+namespace Quillstack\Stream\Tests\Unit;
 
-use QuillStack\Stream\InputStream;
+use Quillstack\Stream\InputStream;
 use Quillstack\UnitTests\AssertEmpty;
 use Quillstack\UnitTests\AssertEqual;
 use Quillstack\UnitTests\Types\AssertArray;

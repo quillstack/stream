@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "QuillStack\\Stream\\": "src/",
-            "QuillStack\\Stream\\Tests\\": "tests/"
+            "Quillstack\\Stream\\": "src/",
+            "Quillstack\\Stream\\Tests\\": "tests/"
         }
     },
     "require-dev": {
-        "quillstack/unit-tests": "^0.2.8"
+        "quillstack/unit-tests": "^0.2.15"
     },
     "extra": {
         "branch-alias": {

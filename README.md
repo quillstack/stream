@@ -1,6 +1,6 @@
 # Quillstack Stream
 
-[![Build Status](https://app.travis-ci.com/quillstack/stream.svg?branch=main)](https://app.travis-ci.com/quillstack/stream)
+[![Tests](https://github.com/quillstack/stream/actions/workflows/tests.yml/badge.svg)](https://github.com/quillstack/stream/actions/workflows/tests.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=alert_status)](https://sonarcloud.io/dashboard?id=quillstack_stream)
 [![Downloads](https://img.shields.io/packagist/dt/quillstack/stream.svg)](https://packagist.org/packages/quillstack/stream)
 [![StyleCI](https://github.styleci.io/repos/301132689/shield?branch=main)](https://github.styleci.io/repos/301132689?branch=main)

@@ -9,6 +9,9 @@ use Quillstack\UnitTests\AssertEmpty;
 use Quillstack\UnitTests\AssertEqual;
 use Quillstack\UnitTests\Types\AssertArray;
 use Quillstack\UnitTests\Types\AssertBoolean;
+use Quillstack\Stream\Exceptions\StreamNotSeekableException;
+use Quillstack\Stream\Exceptions\StreamNotWritableException;
+use Quillstack\UnitTests\AssertExceptions;
 use Quillstack\UnitTests\Types\AssertNull;
 
 class TestInputStream
@@ -20,7 +23,8 @@ class TestInputStream
         private AssertBoolean $assertBoolean,
         private AssertEmpty $assertEmpty,
         private AssertArray $assertArray,
-        private AssertNull $assertNull
+        private AssertNull $assertNull,
+        private AssertExceptions $assertExceptions
     ) {
         $this->stream = new InputStream();
     }
@@ -57,11 +61,14 @@ class TestInputStream
         $this->assertEqual->equal(4, $stream->getSize());
     }
 
+    /**
+     * Closing lets go of what the stream held, the way PSR-7 describes it.
+     */
     public function close()
     {
-        $close = $this->stream->close();
+        $this->stream->close();
 
-        $this->assertBoolean->isFalse($close);
+        $this->assertNull->isNull($this->stream->detach());
     }
 
     public function tell()
@@ -85,18 +92,22 @@ class TestInputStream
         $this->assertBoolean->isFalse($isSeekable);
     }
 
+    /**
+     * PSR-7 has a stream which cannot be seeked say so rather than answer false, which no
+     * caller could tell apart from a position of zero.
+     */
     public function seek()
     {
-        $seek = $this->stream->seek(0);
+        $this->assertExceptions->expect(StreamNotSeekableException::class);
 
-        $this->assertBoolean->isFalse($seek);
+        $this->stream->seek(0);
     }
 
     public function rewind()
     {
-        $rewind = $this->stream->rewind();
+        $this->assertExceptions->expect(StreamNotSeekableException::class);
 
-        $this->assertBoolean->isFalse($rewind);
+        $this->stream->rewind();
     }
 
     public function isWritable()
@@ -108,9 +119,9 @@ class TestInputStream
 
     public function write()
     {
-        $write = $this->stream->write('test');
+        $this->assertExceptions->expect(StreamNotWritableException::class);
 
-        $this->assertBoolean->isFalse($write);
+        $this->stream->write('test');
     }
 
     public function isReadable()
@@ -135,11 +146,14 @@ class TestInputStream
         $this->assertNull->isNull($metadata);
     }
 
+    /**
+     * PSR-7 detaches the resource underneath a stream and hands it over. There is none
+     * underneath one holding a string, so there is nothing to hand back, and what it held
+     * is gone either way.
+     */
     public function detach()
     {
-        $body = $this->stream->detach();
-
-        $this->assertEqual->equal('', $body);
+        $this->assertNull->isNull($this->stream->detach());
         $this->assertEqual->equal('', $this->stream->getContents());
         $this->assertEqual->equal('', $this->stream->read(0));
     }

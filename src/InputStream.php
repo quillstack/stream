@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Quillstack\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use Quillstack\Stream\Exceptions\StreamNotSeekableException;
+use Quillstack\Stream\Exceptions\StreamNotWritableException;
 
 class InputStream implements StreamInterface
 {
     private ?string $body;
 
-    public function __construct($contest = null)
+    public function __construct(?string $contest = null)
     {
         $body = $contest ?? file_get_contents('php://input');
         $this->body = !empty($body) ? $body : '';
@@ -21,26 +23,35 @@ class InputStream implements StreamInterface
      */
     public function __toString()
     {
-        return $this->body;
+        return $this->body ?? '';
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * PSR-7 closes a stream and whatever it sits on. There is nothing underneath this one
+     * but the string it holds, so closing lets go of it. It used to return false, which
+     * neither the interface nor a caller has any use for.
+     */
+    public function close(): void
+    {
+        $this->body = null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function close()
-    {
-        return false;
-    }
-
     /**
      * {@inheritDoc}
+     *
+     * There is no resource underneath a stream holding a string, so there is none to hand
+     * back. What it held is gone either way.
      */
     public function detach()
     {
-        $body = $this->body;
         $this->body = null;
 
-        return $body;
+        return null;
     }
 
     /**
@@ -48,7 +59,7 @@ class InputStream implements StreamInterface
      */
     public function getSize()
     {
-        return strlen($this->body);
+        return strlen($this->body ?? '');
     }
 
     /**
@@ -78,17 +89,17 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
-        return false;
+        throw new StreamNotSeekableException('This stream cannot be seeked');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
-        return false;
+        throw new StreamNotSeekableException('This stream cannot be rewound');
     }
 
     /**
@@ -102,9 +113,9 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function write($string)
+    public function write($string): int
     {
-        return false;
+        throw new StreamNotWritableException('This stream cannot be written to');
     }
 
     /**

@@ -31,11 +31,11 @@
         }
     },
     "require-dev": {
-        "quillstack/unit-tests": "^0.2.15"
+        "quillstack/unit-tests": "^0.3"
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "1.0.x-dev"
+            "dev-main": "0.1.x-dev"
         }
     }
 }

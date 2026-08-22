@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Quillstack\Stream\Tests\Unit;
 
+use Quillstack\Stream\Exceptions\StreamNotSeekableException;
+use Quillstack\Stream\Exceptions\StreamNotWritableException;
 use Quillstack\Stream\InputStream;
 use Quillstack\UnitTests\AssertEmpty;
 use Quillstack\UnitTests\AssertEqual;
+use Quillstack\UnitTests\AssertExceptions;
 use Quillstack\UnitTests\Types\AssertArray;
 use Quillstack\UnitTests\Types\AssertBoolean;
-use Quillstack\Stream\Exceptions\StreamNotSeekableException;
-use Quillstack\Stream\Exceptions\StreamNotWritableException;
-use Quillstack\UnitTests\AssertExceptions;
 use Quillstack\UnitTests\Types\AssertNull;
 
 class TestInputStream

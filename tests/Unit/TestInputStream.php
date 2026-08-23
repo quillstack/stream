@@ -90,13 +90,41 @@ class TestInputStream
     /**
      * `getContents()` is what is left of it; `__toString()` is always the whole thing.
      */
+    /**
+     * `getContents()` is what is left; casting to a string is all of it, whatever has already
+     * been read.
+     */
     public function contentsAreWhatIsLeftAndTheStringIsAllOfIt()
     {
         $stream = new InputStream('abcdef');
         $stream->read(3);
 
-        $this->assertEqual->equal('abcdef', (string) $stream);
         $this->assertEqual->equal('def', $stream->getContents());
+
+        $stream->rewind();
+        $stream->read(3);
+
+        $this->assertEqual->equal('abcdef', (string) $stream);
+    }
+
+    /**
+     * PSR-7 has casting to a string seek to the beginning and read to the end, so afterwards
+     * the stream is at the end. This used to hand the body back without moving — convenient,
+     * and quietly disagreeing with `FileStream` beside it and with every other implementation
+     * of this interface.
+     */
+    public function castingToAStringLeavesItAtTheEnd()
+    {
+        $stream = new InputStream('abcdef');
+        $stream->read(3);
+
+        $this->assertEqual->equal('abcdef', (string) $stream);
+        $this->assertBoolean->isTrue($stream->eof());
+        $this->assertEqual->equal(6, $stream->tell());
+        $this->assertEqual->equal('', $stream->getContents());
+
+        // And it can be asked again: it seeks first, so it is not spent.
+        $this->assertEqual->equal('abcdef', (string) $stream);
     }
 
     public function itCanBeSeekedAround()

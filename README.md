@@ -21,19 +21,34 @@ it is whatever was sent to the process, and very often there is none at all. Thr
 rather than one, so the empty case costs nothing and the reading cases are honest about what
 they can and cannot do.
 
-### Requirements
+## Why this exists
+
+Most PSR-7 implementations have one stream class, built over a PHP resource — usually
+`php://temp`, which spills to disk once it grows past a couple of megabytes. It handles
+everything, which means every string you wrap goes through `fwrite`, `fseek` and `ftell` to be
+read back.
+
+This has four small ones instead, each doing a single thing: a string being read, a file being
+read, a body being sent, and nothing at all. **A body that is already a string in memory does
+not need a file handle to be read back**, and most bodies in an API are already a string in
+memory — see the [benchmark](#benchmark).
+
+A file still gets a file: `FileStream` reads a nineteen-megabyte body without loading it, the
+same as everybody else's does.
+
+## Requirements
 
 - PHP 8.1 or newer
 
-### Installation
+## Installation
 
 ```shell
 composer require quillstack/stream
 ```
 
-### Usage
+## Usage
 
-#### The body of a request
+### The body of a request
 
 `InputStream` reads `php://input`, which is what a request arrives in:
 
@@ -44,7 +59,7 @@ $stream = new InputStream();
 $body = (string) $stream;
 ```
 
-#### A file
+### A file
 
 ```php
 use Quillstack\Stream\FileStream;
@@ -59,7 +74,7 @@ $stream->getContents();
 
 The handle is closed when the stream is, and when it goes out of scope.
 
-#### A body being sent
+### A body being sent
 
 ```php
 use Quillstack\Stream\TextStream;
@@ -70,7 +85,7 @@ $stream = new TextStream(json_encode(['hello' => 'world']));
 `InputStream` does the same thing, but it is named for where a request arrives from and a
 body being sent somewhere is not that.
 
-#### No body at all
+### No body at all
 
 ```php
 use Quillstack\Stream\EmptyStream;
@@ -104,7 +119,7 @@ them once, which is what PSR-7 means by it.
 
 A stream over a string is seekable, because a string held in memory is.
 
-### Technical documentation
+## Technical documentation
 
 All three implement `Psr\Http\Message\StreamInterface`, so anything taking a PSR-7 stream
 takes any of them.
@@ -126,19 +141,58 @@ Asking a stream for something it cannot do throws rather than answering wrongly:
 
 All three extend `StreamException`, so one `catch` covers the lot.
 
-### Unit tests
+## Benchmark
+
+Measured with [quillstack/benchmark](https://github.com/quillstack/benchmark) on a body of 880
+bytes — the size of a small JSON response — created and read back in full. Runs are interleaved,
+each figure is the median of five, and PHP is 8.5.7.
+
+| | Version |
+| --- | --- |
+| quillstack/stream | v0.8.0 |
+| nyholm/psr7 | 1.8.2 |
+| guzzlehttp/psr7 | 2.13.0 |
+| laminas/laminas-diactoros | 3.8.0 |
+
+| | Per body | Relative | Memory |
+| --- | --- | --- | --- |
+| **quillstack/stream** | **1.12 µs** | — | 28 kB |
+| nyholm/psr7 | 5.81 µs | 5.2× | 56 kB |
+| guzzlehttp/psr7 | 6.92 µs | 6.2× | 116 kB |
+| laminas/laminas-diactoros | 7.99 µs | 7.1× | 47 kB |
+
+**The five-fold difference is the design, not the code.** The other three write the string into
+a `php://temp` resource and read it back out through the filesystem layer; this one keeps it as
+a string, because it already was one. Their single class covers files, sockets and strings
+alike; here a file gets `FileStream`, which behaves exactly as theirs do:
+
+| Reading the first 16 bytes of a 19 MB file | Peak memory |
+| --- | --- |
+| quillstack/stream, `FileStream` | 730 kB |
+| nyholm/psr7 | 731 kB |
+| laminas/laminas-diactoros | 730 kB |
+| guzzlehttp/psr7 | 781 kB |
+
+Nobody loads the file. **What this trades away is one class that does everything** — if you need
+a stream over a socket, a compressed resource or anything else PHP can open, theirs takes it and
+this one does not.
+
+## Tests
 
 ```shell
 composer test
 ```
 
-### Docker
+## The rest of Quillstack
 
-```shell
-docker-compose up -d
-docker exec -w /var/www/html -it quillstack_stream sh
-```
+This is one component of [Quillstack](https://github.com/quillstack), a PHP framework which is
+as simple to use as it is strict about what it does.
 
-### License
+- [quillstack/response](https://github.com/quillstack/response) — what carries one back
+- [quillstack/server-request](https://github.com/quillstack/server-request) — what carries one in
+- [quillstack/http-client](https://github.com/quillstack/http-client) — what sends one out
+- [quillstack/uri](https://github.com/quillstack/uri) — the other half of a PSR-7 message
+
+## License
 
 MIT. See [LICENSE](LICENSE).

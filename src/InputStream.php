@@ -37,7 +37,13 @@ class InputStream implements StreamInterface
      */
     public function __toString(): string
     {
-        return $this->body ?? '';
+        // PSR-7 has this seek to the beginning and read to the end, so afterwards the stream is
+        // at the end and `eof()` says so. Handing back the body without moving was convenient
+        // and quietly disagreed with `FileStream` beside it, and with every other
+        // implementation of this interface.
+        $this->rewind();
+
+        return $this->getContents();
     }
 
     /**

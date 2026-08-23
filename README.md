@@ -84,6 +84,26 @@ $stream->eof();          // true
 
 Nothing is opened, so a response which has no body pays nothing for having one.
 
+### Reading
+
+`read($length)` takes what was asked for and leaves the rest; `getContents()` is what is left
+of the stream from where the reader has got to; `__toString()` is always the whole thing:
+
+```php
+$stream = new TextStream('abcdef');
+
+$stream->read(3);        // 'abc'
+$stream->tell();         // 3
+$stream->getContents();  // 'def'
+$stream->eof();          // true
+(string) $stream;        // 'abcdef', wherever the reader is
+```
+
+Reaching for a body twice is what `__toString()` is for — reading the contents twice reads
+them once, which is what PSR-7 means by it.
+
+A stream over a string is seekable, because a string held in memory is.
+
 ### Technical documentation
 
 All three implement `Psr\Http\Message\StreamInterface`, so anything taking a PSR-7 stream

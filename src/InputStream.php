@@ -5,12 +5,22 @@ declare(strict_types=1);
 namespace Quillstack\Stream;
 
 use Psr\Http\Message\StreamInterface;
+use Quillstack\Stream\Exceptions\StreamNotReadableException;
 use Quillstack\Stream\Exceptions\StreamNotSeekableException;
 use Quillstack\Stream\Exceptions\StreamNotWritableException;
 
 class InputStream implements StreamInterface
 {
     private ?string $body;
+
+    /**
+     * How far through it a reader has got.
+     *
+     * There used to be no such thing: `tell()` answered zero for ever, `eof()` answered false
+     * for ever, and `read($length)` handed back the whole body however few bytes were asked
+     * for — which PSR-7 does not allow and which nothing reading in chunks could survive.
+     */
+    private int $position = 0;
 
     /**
      * @param ?string $content what the stream holds; without it, whatever was sent to this
@@ -40,6 +50,7 @@ class InputStream implements StreamInterface
     public function close(): void
     {
         $this->body = null;
+        $this->position = 0;
     }
 
     /**
@@ -71,7 +82,7 @@ class InputStream implements StreamInterface
      */
     public function tell()
     {
-        return 0;
+        return $this->position;
     }
 
     /**
@@ -79,15 +90,20 @@ class InputStream implements StreamInterface
      */
     public function eof()
     {
-        return false;
+        return $this->position >= strlen($this->body ?? '');
     }
 
     /**
      * {@inheritDoc}
      */
+    /**
+     * {@inheritDoc}
+     *
+     * It is a string held in memory, so of course it is.
+     */
     public function isSeekable()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -95,7 +111,23 @@ class InputStream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        throw new StreamNotSeekableException('This stream cannot be seeked');
+        if ($this->body === null) {
+            throw new StreamNotSeekableException('This stream has been closed');
+        }
+
+        $size = strlen($this->body);
+
+        $position = match ($whence) {
+            SEEK_CUR => $this->position + $offset,
+            SEEK_END => $size + $offset,
+            default => $offset,
+        };
+
+        if ($position < 0) {
+            throw new StreamNotSeekableException("Cannot seek to {$position}");
+        }
+
+        $this->position = $position;
     }
 
     /**
@@ -103,7 +135,7 @@ class InputStream implements StreamInterface
      */
     public function rewind(): void
     {
-        throw new StreamNotSeekableException('This stream cannot be rewound');
+        $this->seek(0);
     }
 
     /**
@@ -135,15 +167,31 @@ class InputStream implements StreamInterface
      */
     public function read($length)
     {
-        return $this->body ?? '';
+        if ($length < 0) {
+            throw new StreamNotReadableException('Cannot read a negative number of bytes');
+        }
+
+        $read = substr($this->body ?? '', $this->position, $length);
+        $this->position += strlen($read);
+
+        return $read;
     }
 
     /**
      * {@inheritDoc}
      */
+    /**
+     * {@inheritDoc}
+     *
+     * What is left of it, which is what PSR-7 means: everything from where the reader is to
+     * the end. `__toString()` is the one that always gives back the whole thing.
+     */
     public function getContents()
     {
-        return $this->body ?? '';
+        $rest = substr($this->body ?? '', $this->position);
+        $this->position = strlen($this->body ?? '');
+
+        return $rest;
     }
 
     /**

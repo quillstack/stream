@@ -52,13 +52,75 @@ class TestInputStream
 
     public function notEmptyGivenInput()
     {
-        $contest = 'test';
-        $stream = new InputStream($contest);
+        $stream = new InputStream('test');
 
+        // `read(0)` asks for nothing and gets nothing; it used to hand back the whole body
+        // whatever was asked for, which PSR-7 does not allow.
+        $this->assertEqual->equal('', $stream->read(0));
         $this->assertEqual->equal('test', $stream->getContents());
-        $this->assertEqual->equal('test', $stream->read(0));
         $this->assertEqual->equal('test', (string) $stream);
         $this->assertEqual->equal(4, $stream->getSize());
+    }
+
+    /**
+     * Reading takes what was asked for and leaves the rest where it is.
+     */
+    public function readingTakesWhatWasAskedFor()
+    {
+        $stream = new InputStream('abcdef');
+
+        $this->assertEqual->equal('abc', $stream->read(3));
+        $this->assertEqual->equal(3, $stream->tell());
+        $this->assertEqual->equal('de', $stream->read(2));
+        $this->assertEqual->equal('f', $stream->getContents());
+        $this->assertBoolean->isTrue($stream->eof());
+    }
+
+    /**
+     * Asking for more than is left gives what is left.
+     */
+    public function askingForMoreThanIsLeftGivesWhatIsLeft()
+    {
+        $stream = new InputStream('abc');
+
+        $this->assertEqual->equal('abc', $stream->read(100));
+        $this->assertEqual->equal('', $stream->read(100));
+    }
+
+    /**
+     * `getContents()` is what is left of it; `__toString()` is always the whole thing.
+     */
+    public function contentsAreWhatIsLeftAndTheStringIsAllOfIt()
+    {
+        $stream = new InputStream('abcdef');
+        $stream->read(3);
+
+        $this->assertEqual->equal('abcdef', (string) $stream);
+        $this->assertEqual->equal('def', $stream->getContents());
+    }
+
+    public function itCanBeSeekedAround()
+    {
+        $stream = new InputStream('abcdef');
+
+        $stream->seek(2);
+        $this->assertEqual->equal('cd', $stream->read(2));
+
+        $stream->seek(1, SEEK_CUR);
+        $this->assertEqual->equal('f', $stream->read(1));
+
+        $stream->seek(-2, SEEK_END);
+        $this->assertEqual->equal('ef', $stream->read(2));
+
+        $stream->rewind();
+        $this->assertEqual->equal('abcdef', $stream->getContents());
+    }
+
+    public function seekingBeforeTheStartSaysSo()
+    {
+        $this->assertExceptions->expect(StreamNotSeekableException::class);
+
+        (new InputStream('abc'))->seek(-1);
     }
 
     /**
@@ -78,36 +140,35 @@ class TestInputStream
         $this->assertEqual->equal(0, $tell);
     }
 
+    /**
+     * Nothing at all is already at its end, which is what PSR-7 means by it. It used to
+     * answer false however far through the reader was.
+     */
     public function eof()
     {
-        $eof = $this->stream->eof();
-
-        $this->assertBoolean->isFalse($eof);
-    }
-
-    public function isSeekable()
-    {
-        $isSeekable = $this->stream->isSeekable();
-
-        $this->assertBoolean->isFalse($isSeekable);
+        $this->assertBoolean->isTrue($this->stream->eof());
+        $this->assertBoolean->isFalse((new InputStream('abc'))->eof());
     }
 
     /**
-     * PSR-7 has a stream which cannot be seeked say so rather than answer false, which no
-     * caller could tell apart from a position of zero.
+     * It is a string held in memory, so of course it is.
      */
-    public function seek()
+    public function isSeekable()
     {
-        $this->assertExceptions->expect(StreamNotSeekableException::class);
-
-        $this->stream->seek(0);
+        $this->assertBoolean->isTrue($this->stream->isSeekable());
     }
 
-    public function rewind()
+    /**
+     * A stream which has been let go of cannot be moved around any more.
+     */
+    public function seekingAClosedStreamSaysSo()
     {
+        $stream = new InputStream('abc');
+        $stream->close();
+
         $this->assertExceptions->expect(StreamNotSeekableException::class);
 
-        $this->stream->rewind();
+        $stream->seek(0);
     }
 
     public function isWritable()
@@ -155,6 +216,6 @@ class TestInputStream
     {
         $this->assertNull->isNull($this->stream->detach());
         $this->assertEqual->equal('', $this->stream->getContents());
-        $this->assertEqual->equal('', $this->stream->read(0));
+        $this->assertEqual->equal('', $this->stream->read(1));
     }
 }

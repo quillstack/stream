@@ -3,7 +3,7 @@
     "description": "The simple implementation of PSR-7: StreamInterface.",
     "type": "library",
     "license": "MIT",
-    "homepage": "https://quillstack.org/",
+    "homepage": "https://quillstack.org/packages/stream",
     "keywords": [
         "stream",
         "input",

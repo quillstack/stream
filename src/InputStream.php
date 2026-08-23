@@ -12,9 +12,13 @@ class InputStream implements StreamInterface
 {
     private ?string $body;
 
-    public function __construct(?string $contest = null)
+    /**
+     * @param ?string $content what the stream holds; without it, whatever was sent to this
+     *                         process. The parameter was called `contest` for years.
+     */
+    public function __construct(?string $content = null)
     {
-        $body = $contest ?? file_get_contents('php://input');
+        $body = $content ?? file_get_contents('php://input');
         $this->body = !empty($body) ? $body : '';
     }
 

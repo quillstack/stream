@@ -59,6 +59,17 @@ $stream->getContents();
 
 The handle is closed when the stream is, and when it goes out of scope.
 
+#### A body being sent
+
+```php
+use Quillstack\Stream\TextStream;
+
+$stream = new TextStream(json_encode(['hello' => 'world']));
+```
+
+`InputStream` does the same thing, but it is named for where a request arrives from and a
+body being sent somewhere is not that.
+
 #### No body at all
 
 ```php
@@ -80,7 +91,8 @@ takes any of them.
 
 | Class | What it reads |
 | --- | --- |
-| `InputStream` | `php://input` — the body of the request being handled |
+| `InputStream` | `php://input` — the body of the request being handled, or a string given to it |
+| `TextStream` | a string somebody already has, on its way out |
 | `FileStream` | a file on disk, opened when the stream is built |
 | `EmptyStream` | nothing; every read is empty and every size is zero |
 

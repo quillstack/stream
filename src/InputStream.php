@@ -35,7 +35,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->body ?? '';
     }
@@ -72,7 +72,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return strlen($this->body ?? '');
     }
@@ -80,7 +80,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function tell()
+    public function tell(): int
     {
         return $this->position;
     }
@@ -88,7 +88,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function eof()
+    public function eof(): bool
     {
         return $this->position >= strlen($this->body ?? '');
     }
@@ -101,7 +101,7 @@ class InputStream implements StreamInterface
      *
      * It is a string held in memory, so of course it is.
      */
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return true;
     }
@@ -141,7 +141,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -157,7 +157,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function isReadable()
+    public function isReadable(): bool
     {
         return true;
     }
@@ -165,7 +165,7 @@ class InputStream implements StreamInterface
     /**
      * {@inheritDoc}
      */
-    public function read($length)
+    public function read($length): string
     {
         if ($length < 0) {
             throw new StreamNotReadableException('Cannot read a negative number of bytes');
@@ -186,7 +186,7 @@ class InputStream implements StreamInterface
      * What is left of it, which is what PSR-7 means: everything from where the reader is to
      * the end. `__toString()` is the one that always gives back the whole thing.
      */
-    public function getContents()
+    public function getContents(): string
     {
         $rest = substr($this->body ?? '', $this->position);
         $this->position = strlen($this->body ?? '');

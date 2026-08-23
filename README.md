@@ -6,6 +6,11 @@
 [![PHP Version](https://img.shields.io/packagist/php-v/quillstack/stream)](https://packagist.org/packages/quillstack/stream)
 [![StyleCI](https://github.styleci.io/repos/301132689/shield?branch=main)](https://github.styleci.io/repos/301132689?branch=main)
 [![CodeFactor](https://www.codefactor.io/repository/github/quillstack/stream/badge)](https://www.codefactor.io/repository/github/quillstack/stream)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=quillstack_stream)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=coverage)](https://sonarcloud.io/summary/new_code?id=quillstack_stream)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_stream)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_stream)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=quillstack_stream&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=quillstack_stream)
 [![License](https://img.shields.io/packagist/l/quillstack/stream)](https://github.com/quillstack/stream/blob/main/LICENSE)
 
 The simple implementation of [PSR-7: Stream](https://www.php-fig.org/psr/psr-7/). Full
